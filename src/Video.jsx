@@ -9,9 +9,9 @@ export const RemotionVideo = () => {
 				id="ComponentStructure"
 				component={ComponentStructure}
 				durationInFrames={150}
-				fps={30}
-				width={1920}
-				height={1080}
+				fps={60}
+				width={1920*2}
+				height={1080*2}
 			/>
 		</>
 	);
