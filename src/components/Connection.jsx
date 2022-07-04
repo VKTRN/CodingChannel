@@ -2,6 +2,25 @@ import {useCurrentFrame} from 'remotion';
 import {interpolate} from 'remotion';
 import {Easing} from 'remotion';
 
+export const Connection = ({points, color, signalColor, time, reverse, signal}) => {
+  
+  const frame           = useCurrentFrame()
+  const r1              = linear(frame, 0, time*.8)
+  const r2              = linear(frame, time*.2, time)
+  const pointsReversed  = points.slice(0).reverse()
+
+  const interpolation1  = reverse? getInterpolation(pointsReversed, r1) : getInterpolation(points, r1)
+  const interpolation2  = reverse? getInterpolation(pointsReversed, r2) : getInterpolation(points, r2)
+  
+  return(
+    <>
+     <polyline id="eins" points={getPolyline(points)} fill = 'none' stroke = {color} strokeWidth = {5}/>
+     {signal && <polyline id="eins" points={getPolyline(interpolation1)} fill = 'none' stroke = {signalColor} strokeWidth = {5}/>}
+     {signal && <polyline id="eins" points={getPolyline(interpolation2)} fill = 'none' stroke = {color} strokeWidth = {5}/>}
+    </> 
+  )
+}
+
 export const ease = (frame, start, end) => {
   const r = interpolate(frame, [start, end], [0, 1], {
     easing: Easing.bezier(.5, 0, .5, 1),
@@ -20,29 +39,6 @@ export const linear = (frame, start, end) => {
   
   return r
 }
-
-export const Signal = ({points}) => {
-  
-  const frame  = useCurrentFrame()
-  const r1      = linear(frame, 0, 120)
-  const r2      = linear(frame, 30, 150)
-
-  const interpolation1 = getInterpolation(points, r1)
-  const interpolation2 = getInterpolation(points, r2)
-
-
-  
-  return(
-    // svg of a polygonal chain
-
-    <>
-     <polyline id="eins" points={getPolyline(points)} fill = 'none' stroke = "black" strokeWidth = {5}/>
-     <polyline id="eins" points={getPolyline(interpolation1)} fill = 'none' stroke = "yellow" strokeWidth = {5}/>
-     <polyline id="eins" points={getPolyline(interpolation2)} fill = 'none' stroke = "black" strokeWidth = {5}/>
-    </> 
-  )
-}
-
 
 const getLength = (p1, p2) => {
 	return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2))
@@ -95,10 +91,6 @@ const getPolyline = (points) => {
 	}
 	return polyline.join(' ')
 }
-
-// const lengths 								 = getLengths(points)
-// const {index, remainingLength} = getIndex(lengths, 0.55)
-// const interpolation 					 = getInterpolation(points, index, remainingLength, lengths)
 
 
 
