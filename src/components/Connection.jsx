@@ -2,11 +2,11 @@ import {useCurrentFrame} from 'remotion';
 import {interpolate} from 'remotion';
 import {Easing} from 'remotion';
 
-export const Connection = ({points, color, signalColor, time, reverse, signal}) => {
+export const Connection = ({points, color='black', signalColor = 'yellow', time = 60, reverse = false, signal = true, dt=0}) => {
   
   const frame           = useCurrentFrame()
-  const r1              = linear(frame, 0, time*.8)
-  const r2              = linear(frame, time*.2, time)
+  const r1              = linear(frame, dt, dt+time*.8)
+  const r2              = linear(frame, dt+time*.2, dt+time)
   const pointsReversed  = points.slice(0).reverse()
 
   const interpolation1  = reverse? getInterpolation(pointsReversed, r1) : getInterpolation(points, r1)
