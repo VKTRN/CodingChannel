@@ -1,6 +1,6 @@
 import {Connection} from './Connection'
 
-export const DoubleConnection = ({points, forward}) => {
+export const DoubleConnection = ({points, forward, t0, velocity, signalLength}) => {
   
   const points1 = JSON.parse(JSON.stringify(points))
   const points2 = JSON.parse(JSON.stringify(points))
@@ -24,8 +24,8 @@ export const DoubleConnection = ({points, forward}) => {
 
   return (
     <>
-      <Connection points={points1} color = 'black' time={150} signalColor = 'red'    reverse={true} signal = {!forward}/>	
-      <Connection points={points2} color = 'black' time={150}  signalColor = 'yellow' reverse={false} signal = {forward}/>	
+      <Connection points={points1} color = 'black' totalFrames={150} signalColor = 'red'    reverse={true} signal = {!forward} t0 = {t0} velocity = {velocity} signalLength = {signalLength}/>	
+      <Connection points={points2} color = 'black' totalFrames={150}  signalColor = 'yellow' reverse={false} signal = {forward} t0 = {t0} velocity = {velocity} signalLength = {signalLength}/>	
     </>
     )
 }

@@ -2,12 +2,21 @@ import {useCurrentFrame} from 'remotion';
 import {interpolate} from 'remotion';
 import {Easing} from 'remotion';
 
-export const Connection = ({points, color='black', signalColor = 'yellow', time = 60, reverse = false, signal = true, dt=0}) => {
+export const Connection = ({points, color='black', signalColor = 'yellow', velocity = 5, reverse = false, signal = true, t0 =0, signalLength = 100}) => {
   
+
   const frame           = useCurrentFrame()
-  const r1              = linear(frame, dt, dt+time*.8)
-  const r2              = linear(frame, dt+time*.2, dt+time)
+
+  const lengths          = getLengths(points)
+  const length          = lengths.reduce((acc, curr) => acc + curr)
+  const signalFrames    = signalLength / velocity
+  const totalFrames     = length / velocity + signalFrames
+  const r1              = linear(frame, t0, t0+totalFrames - signalFrames)
+  const r2              = linear(frame, t0+signalFrames, t0+totalFrames)
   const pointsReversed  = points.slice(0).reverse()
+
+  console.log(length)
+  console.log(signalLength)
 
   const interpolation1  = reverse? getInterpolation(pointsReversed, r1) : getInterpolation(points, r1)
   const interpolation2  = reverse? getInterpolation(pointsReversed, r2) : getInterpolation(points, r2)
@@ -74,7 +83,6 @@ const getInterpolation = (points, fraction) => {
   const lengths 								 = getLengths(points)
   const {index, remainingLength} = getIndex(lengths, fraction)
 	const interpolation = points.slice(0, index+1)
-  console.log(remainingLength)
 	const x = points[index].x + (points[index + 1].x - points[index].x) *(lengths[index] - remainingLength)/ lengths[index]
   const y = points[index].y + (points[index + 1].y - points[index].y) *(lengths[index] - remainingLength)/ lengths[index]
   const lastPoint = {x: x, y: y}

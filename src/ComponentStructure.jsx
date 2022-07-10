@@ -22,15 +22,14 @@ export const ComponentStructure = () => {
 		<AbsoluteFill style={{backgroundColor: 'rgb(90, 157, 224)'}}>
 				<Sequence from={0}>
 					<svg width="1920" height="1080">
-						{/* <Connection points={points} color = 'black' time={150} signalColor = 'red' signal = {true} reverse={true}/>	 */}
-						<DoubleConnection points = {appToGrid} forward = {true}/>
-						<Connection points = {appToScore} dt={13} time = {150}/>
+						<DoubleConnection points = {appToGrid} forward = {true} t0 = {0} velocity = {10} signalLength = {200}/>
+						<Connection points = {appToScore} t0={5} velocity = {10} signalLength = {200}/>
 						<Component name = {'App'} {...app}/>	
 						<Component name = {'Grid'} {...grid}/>
 						<Component name = {'Score'} {...score}/>
-						{/* <Array x={278} y={315} cells={cells}/> */}
-						{/* <ObjectComponent x={278} y={240} item = {{x: 7, o: 3}}/> */}
-						{/* <ValueComponent x={278} y={170} item = {'x'}/> */}
+						<Array x={app.x - app.width/2 + 8} y={315} cells={cells}/>
+						<ObjectComponent x={app.x - app.width/2 + 8} y={240} item = {{x: 7, o: 3}}/>
+						<ValueComponent x={app.x - app.width/2 + 8} y={170} item = {'x'}/>
 					</svg>
 				</Sequence>
 		</AbsoluteFill>
