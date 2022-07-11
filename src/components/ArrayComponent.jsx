@@ -1,4 +1,4 @@
-export const Array = ({cells, x, y}) => {
+export const ArrayComponent = ({cells, x, y}) => {
   
   return(
     <>

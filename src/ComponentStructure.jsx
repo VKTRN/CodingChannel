@@ -3,7 +3,7 @@ import {Sequence} 				from 'remotion'
 import {Component} 				from './components/Component'
 import {Connection} 			from './components/Connection'
 import {DoubleConnection} from './components/DoubleConnection'
-import {Array} 						from './components/Array'
+import {ArrayComponent}   from './components/ArrayComponent'
 import {ObjectComponent}  from './components/ObjectComponent'
 import {ValueComponent} 	from './components/ValueComponent'
 
@@ -14,8 +14,20 @@ const point = (x, y) => {
 export const ComponentStructure = () => {
 
 	const app = {x: 200, y: 540, width: 260, height: 300}
-	const grid = {x: app.x+600, y: 700, width: 200, height: 200}
-	const score = {x: app.x+600, y: 200, width: 200, height: 200}
+	const grid = {x: 800, y: 700, width: 200, height: 200}
+	const score = {x: 800, y: 200, width: 200, height: 200}
+
+	// an array of numbers increasing by 50
+	const ys = Array.from({length: 9}, (_, i) => i * 100 + 100)
+	const Cells = ys.map(y => ({x: 1400, y: y, width: 150, height: 80}))
+
+	const gridToCells = Cells.map((cell, index) => {
+		const p1 = point(grid.x + grid.width /2, grid.y)
+		const p2 = point(cell.x - cell.width /2, cell.y)
+		const points = generatePointsX(p1, p2, .5)
+		return points
+	} )
+
 
 	const appToGrid = generatePointsX(point(app.x + app.width / 2, app.y) , {x: grid.x - grid.width / 2, y: grid.y}, .5)
 	const appToScore = generatePointsX({x: appToGrid[1].x + 5, y: appToGrid[1].y - 5}, {x: score.x - score.width/2, y: score.y}, 0)
@@ -27,11 +39,26 @@ export const ComponentStructure = () => {
 		<AbsoluteFill style={{backgroundColor: 'rgb(90, 157, 224)'}}>
 				<Sequence from={0}>
 					<svg width="1920" height="1080">
-						<DoubleConnection points = {appToGrid} forward = {true} t0 = {0} velocity = {10} signalLength = {200} direction = 'x'/>
-						<Connection points = {appToScore} t0={19} velocity = {10} signalLength = {200}/>
+						<DoubleConnection points = {appToGrid} forward = {true} t0 = {0} velocity = {10} signalLength = {100} direction = 'x'/>
+						<Connection points = {appToScore} t0={19} velocity = {10} signalLength = {100}/>
 						<Component name = {'App'} {...app}/>	
 						<Component name = {'Grid'} {...grid}/>
 						<Component name = {'Score'} {...score}/>
+
+						{
+							Cells.map((cell, i) => {
+								return (
+									<>
+										{/* <Connection points = {gridToCells[i]} t0={73} velocity = {10} signalLength = {100}/> */}
+										<DoubleConnection points = {gridToCells[i]} forward = {true} t0 = {73} velocity = {10} signalLength = {100} direction = 'x'/>
+
+										<Component name = {'Cell'} {...cell}/>
+									</>
+								)
+							}
+							)
+						}
+
 						{/* <Array x={app.x - app.width/2 + 8} y={315} cells={cells}/> */}
 						{/* <ObjectComponent x={app.x - app.width/2 + 8} y={240} item = {{x: 7, o: 3}}/> */}
 						{/* <ValueComponent x={app.x - app.width/2 + 8} y={170} item = {'x'}/> */}
