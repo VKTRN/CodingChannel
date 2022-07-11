@@ -7,14 +7,19 @@ import {Array} 						from './components/Array'
 import {ObjectComponent}  from './components/ObjectComponent'
 import {ValueComponent} 	from './components/ValueComponent'
 
+const point = (x, y) => {
+	return {x, y}
+}
+
 export const ComponentStructure = () => {
 
-	const app = {x: 960, y: 200, width: 260, height: 300}
-	const grid = {x: app.x-400, y: 550, width: 200, height: 200}
-	const score = {x: app.x+400, y: 550, width: 200, height: 200}
+	const app = {x: 200, y: 540, width: 260, height: 300}
+	const grid = {x: app.x+600, y: 700, width: 200, height: 200}
+	const score = {x: app.x+600, y: 200, width: 200, height: 200}
 
-	const appToGrid = generatePoints({x: app.x, y: app.y + app.height / 2}, {x: grid.x, y: grid.y - grid.height/2}, .5)
-	const appToScore = generatePoints({x: appToGrid[1].x + 5, y: appToGrid[1].y + 5}, {x: score.x, y: score.y - score.height/2}, 0)
+	const appToGrid = generatePointsX(point(app.x + app.width / 2, app.y) , {x: grid.x - grid.width / 2, y: grid.y}, .5)
+	const appToScore = generatePointsX({x: appToGrid[1].x + 5, y: appToGrid[1].y - 5}, {x: score.x - score.width/2, y: score.y}, 0)
+
 
 	const cells = ['x', 'o','x','','o', 'x','','','']
 
@@ -22,14 +27,14 @@ export const ComponentStructure = () => {
 		<AbsoluteFill style={{backgroundColor: 'rgb(90, 157, 224)'}}>
 				<Sequence from={0}>
 					<svg width="1920" height="1080">
-						<DoubleConnection points = {appToGrid} forward = {true} t0 = {0} velocity = {10} signalLength = {200}/>
-						<Connection points = {appToScore} t0={5} velocity = {10} signalLength = {200}/>
+						<DoubleConnection points = {appToGrid} forward = {true} t0 = {0} velocity = {10} signalLength = {200} direction = 'x'/>
+						<Connection points = {appToScore} t0={19} velocity = {10} signalLength = {200}/>
 						<Component name = {'App'} {...app}/>	
 						<Component name = {'Grid'} {...grid}/>
 						<Component name = {'Score'} {...score}/>
-						<Array x={app.x - app.width/2 + 8} y={315} cells={cells}/>
-						<ObjectComponent x={app.x - app.width/2 + 8} y={240} item = {{x: 7, o: 3}}/>
-						<ValueComponent x={app.x - app.width/2 + 8} y={170} item = {'x'}/>
+						{/* <Array x={app.x - app.width/2 + 8} y={315} cells={cells}/> */}
+						{/* <ObjectComponent x={app.x - app.width/2 + 8} y={240} item = {{x: 7, o: 3}}/> */}
+						{/* <ValueComponent x={app.x - app.width/2 + 8} y={170} item = {'x'}/> */}
 					</svg>
 				</Sequence>
 		</AbsoluteFill>
@@ -41,7 +46,7 @@ export const ComponentStructure = () => {
 // The second point has the same x-coordinate as the start point and the y-coordinate is the average of the y-coordinates of the start and end point.
 // The third point has the same x-coordinate as the end point and the y-coordinate is the average of the y-coordinates of the start and end point.
 
-const generatePoints = (start, end, offset) => {
+const generatePointsY = (start, end, offset) => {
 	const midY = start.y + (end.y - start.y) * offset
 	const points = []
 	points.push(start)
@@ -50,3 +55,15 @@ const generatePoints = (start, end, offset) => {
 	points.push(end)
 	return points
 }
+
+const generatePointsX = (start, end, offset) => {
+	const midX = start.x + (end.x - start.x) * offset
+	const points = []
+	points.push(start)
+	points.push({x: midX, y: start.y})
+	points.push({x: midX, y: end.y})
+	points.push(end)
+	return points
+}
+
+
