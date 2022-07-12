@@ -40,8 +40,8 @@ export const DoubleConnection = ({points, forward, t0, velocity, signalLength, d
 
   return (
     <>
-      <Connection points={points2} color = 'black' totalFrames={150} signalColor = 'red'    reverse={true} signal = {!forward} t0 = {t0} velocity = {velocity} signalLength = {signalLength}/>	
-      <Connection points={points1} color = 'black' totalFrames={150}  signalColor = 'yellow' reverse={false} signal = {forward} t0 = {t0} velocity = {velocity} signalLength = {signalLength}/>	
+      <Connection points={points2} color = 'darkgreen' totalFrames={150} signalColor = 'red'    reverse={true} signal = {!forward} t0 = {t0} velocity = {velocity} signalLength = {signalLength}/>	
+      <Connection points={points1} color = 'darkblue' totalFrames={150}  signalColor = 'yellow' reverse={false} signal = {forward} t0 = {t0} velocity = {velocity} signalLength = {signalLength}/>	
     </>
     )
 }

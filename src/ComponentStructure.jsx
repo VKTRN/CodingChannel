@@ -14,7 +14,7 @@ const point = (x, y) => {
 export const ComponentStructure = () => {
 
 	const app = {x: 200, y: 540, width: 260, height: 300}
-	const grid = {x: 800, y: 700, width: 200, height: 200}
+	const grid = {x: 800, y: 700, width: 260, height: 200}
 	const score = {x: 800, y: 200, width: 200, height: 200}
 
 	// an array of numbers increasing by 50
@@ -50,18 +50,22 @@ export const ComponentStructure = () => {
 								return (
 									<>
 										{/* <Connection points = {gridToCells[i]} t0={73} velocity = {10} signalLength = {100}/> */}
-										<DoubleConnection points = {gridToCells[i]} forward = {true} t0 = {73} velocity = {10} signalLength = {100} direction = 'x'/>
+										<DoubleConnection points = {gridToCells[i]} forward = {true} t0 = {76} velocity = {10} signalLength = {100} direction = 'x'/>
+										<Component name = {''} {...cell}/>
+										<ValueComponent x={cell.x - cell.width/2 + 8} y={cell.y} value = {cells[i]} name = {`cells[${i}]`}/>
 
-										<Component name = {'Cell'} {...cell}/>
 									</>
 								)
 							}
 							)
 						}
 
-						{/* <Array x={app.x - app.width/2 + 8} y={315} cells={cells}/> */}
-						{/* <ObjectComponent x={app.x - app.width/2 + 8} y={240} item = {{x: 7, o: 3}}/> */}
-						{/* <ValueComponent x={app.x - app.width/2 + 8} y={170} item = {'x'}/> */}
+						<ArrayComponent x={app.x - app.width/2 + 8} y={app.y-30} cells={cells}/>
+						<ArrayComponent x={grid.x - grid.width/2 + 8} y={grid.y+60} cells={cells}/>
+						<ObjectComponent x={app.x - app.width/2 + 8} y={app.y+40} item = {{x: 7, o: 3}}/>
+						<ObjectComponent x={score.x - score.width/2 + 8} y={score.y+55} item = {{x: 7, o: 3}}/>
+						<ValueComponent x={app.x - app.width/2 + 8} y={app.y+110} name = 'turn' value = {'x'}/>
+						
 					</svg>
 				</Sequence>
 		</AbsoluteFill>
