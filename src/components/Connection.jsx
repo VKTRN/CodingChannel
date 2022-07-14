@@ -3,7 +3,6 @@ import {interpolate} from 'remotion';
 import {Easing} from 'remotion';
 
 export const Connection = ({points, color='black', signalColor = 'yellow', velocity = 5, reverse = false, signal = true, t0 =0, signalLength = 100}) => {
-  
 
   const frame           = useCurrentFrame()
 
