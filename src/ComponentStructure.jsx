@@ -9,6 +9,7 @@ import {ValueComponent} 	from './components/ValueComponent'
 import {bump} from './utils/interpolation.js'
 import {useCurrentFrame} from 'remotion';
 import {UseEffectHook} from './components/UseEffectHook'
+import {app} from './componentObjects.js'
 
 const generatePointsY = (start, end, offset) => {
 	const midY = start.y + (end.y - start.y) * offset
@@ -34,7 +35,7 @@ const point = (x, y) => {
 	return {x, y}
 }
 
-const app 					= {x: 200, y: 540, width: 260, height: 300}
+// const app 					= {x: 200, y: 540, width: 260, height: 300}
 const grid 					= {x: 800, y: 700, width: 260, height: 200}
 const score 				= {x: 800, y: 200, width: 200, height: 200}
 const useEffectHook = {x: 700, y: 450, width: 180, height: 180}
@@ -52,9 +53,9 @@ const gridToCells = Cells.map((cell, index) => {
 
 export const ComponentStructure = () => {
 
-	const appToGrid  = generatePointsX(point(app.x + app.width / 2, app.y+52) , {x: grid.x - grid.width / 2, y: grid.y}, .5)
-	const appToScore = generatePointsX(point(app.x + app.width / 2, app.y-13), {x: score.x - score.width/2, y: score.y}, .45)
-	const turnToGrid = generatePointsX( point(app.x + app.width / 2, app.y + 125), point(grid.x - grid.width / 2, grid.y+15), .455)
+	const appToGrid  = generatePointsX(app.slots.cells.connection , {x: grid.x, y: grid.y}, .5)
+	const appToScore = generatePointsX(app.slots.score.connection, {x: score.x, y: score.y}, .45)
+	const turnToGrid = generatePointsX(app.slots.turn.connection, point(grid.x, grid.y+15), .455)
 
 	const cells = ['x', 'o','x','','o', 'x','','','']
 	const frame = useCurrentFrame()
@@ -102,9 +103,9 @@ export const ComponentStructure = () => {
 						<Component name = {'Score'} {...score} bump = {bump(frame, 72, 92)}/>
 						<UseEffectHook {...useEffectHook}/>
 
-						<ArrayComponent x={app.x - app.width/2 + 8} y={app.y+40} cells={cells}/>
-						<ObjectComponent x={app.x - app.width/2 + 8} y={app.y-30} item = {{x: 7, o: 3}}/>
-						<ValueComponent x={app.x - app.width/2 + 8} y={app.y+110} name = 'turn' value = {'x'}/>
+						<ObjectComponent x={app.slots.score.position.x}  y={app.slots.score.position.y} item = {{x: 7, o: 3}}/>
+						<ArrayComponent  x={app.slots.cells.position.x}  y={app.slots.cells.position.y} cells={cells}/>
+						<ValueComponent  x={app.slots.turn.position.x}   y={app.slots.turn.position.y} name = 'turn' value = {'x'}/>
 					</svg>
 				</Sequence>
 		</AbsoluteFill>
