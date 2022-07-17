@@ -1,11 +1,11 @@
 import {Composition} from 'remotion';
-import {ComponentStructure} from './ComponentStructure';
+import {App} from './App';
 
 export const RemotionVideo = () => {
 	return (
 		<Composition
 			id="ComponentStructure"
-			component={ComponentStructure}
+			component={App}
 			durationInFrames={500}
 			fps={60}
 			width={1920}

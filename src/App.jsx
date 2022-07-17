@@ -9,9 +9,12 @@ import {ValueComponent} 	from './components/ValueComponent'
 import {bump} 					  from './utils/interpolation.js'
 import {useCurrentFrame}  from 'remotion';
 import {UseEffectHook} 		from './components/UseEffectHook'
-import {app} 							from './componentObjects.js'
-import {grid} 						from './componentObjects.js'
-import {score} 						from './componentObjects.js'
+import {app} 							from './props/components.js'
+// import {grid} 						from './props/components.js'
+// import {score} 						from './props/components.js'
+import {cellsAppToGrid} from './props/connections.js'
+import {turnAppToGrid} from './props/connections.js'
+import {scoreAppToScore} from './props/connections.js'
 
 const generatePointsY = (start, end, offset) => {
 	const midY = start.y + (end.y - start.y) * offset
@@ -37,30 +40,22 @@ const point = (x, y) => {
 	return {x, y}
 }
 
-// const app 					= {x: 200, y: 540, width: 260, height: 300}
-// const grid 					= {x: 800, y: 700, width: 260, height: 200}
-const score 				= {x: 800, y: 200, width: 200, height: 200}
-const useEffectHook = {x: 700, y: 450, width: 180, height: 180}
+console.log(app)
 
-const ys = Array.from({length: 9}, (_, i) => i * 100 + 100)
-const Cells = ys.map(y => ({x: 1400, y: y, width: 150, height: 80}))
+// const useEffectHook = {x: 700, y: 450, width: 180, height: 180}
 
-const gridToCells = Cells.map((cell, index) => {
-	const p1 = point(grid.x + grid.width /2, grid.y)
-	const p2 = point(cell.x - cell.width /2, cell.y)
-	const points = generatePointsX(p1, p2, .5)
-	return points
-} )
+// const ys    = Array.from({length: 9}, (_, i) => i * 100 + 100)
+// const Cells = ys.map(y => ({x: 1400, y: y, width: 150, height: 80}))
+
+// const gridToCells = Cells.map((cell, index) => {
+// 	const p1 = point(grid.x + grid.width /2, grid.y)
+// 	const p2 = point(cell.x - cell.width /2, cell.y)
+// 	const points = generatePointsX(p1, p2, .5)
+// 	return points
+// } )
 
 
-export const ComponentStructure = () => {
-
-	console.log(app)
-	console.log(grid)
-
-	const appToGrid  = generatePointsX(app.slots.cells.connection , grid.props[0], .5)
-	const turnToGrid = generatePointsX(app.slots.turn.connection, grid.props[1], .44)
-	const appToScore = generatePointsX(app.slots.score.connection, score.props[0], .45)
+export const App = () => {
 
 	const cells = ['x', 'o','x','','o', 'x','','','']
 	const frame = useCurrentFrame()
@@ -99,21 +94,16 @@ export const ComponentStructure = () => {
 						} */}
 
 
-						<DoubleConnection points = {appToGrid} forward = {true} t0 = {0} velocity = {10} signalLength = {100} direction = 'x'/>
-						<Connection color = 'darkred' points = {turnToGrid} t0={0} velocity = {10} signalLength = {100}/>
-						<Connection color = 'purple' points = {appToScore} t0={19} velocity = {10} signalLength = {100}/>
+						{/* <DoubleConnection points = {cellsAppToGrid} forward = {true} t0 = {0} velocity = {10} signalLength = {100} direction = 'x'/> */}
+						{/* <Connection  			points = {turnAppToGrid} color='darkred' t0={0} velocity = {10} signalLength = {100}/> */}
+						{/* <Connection  			points = {scoreAppToScore} color='purple' t0={19} velocity = {10} signalLength = {100}/> */}
+						
 						<Component name = {'App'} {...app}/>	
-						<Component name = {'Grid'} {...grid} bump = {bump(frame, 50, 70)}/>
-						<Component name = {'Score'} {...score} bump = {bump(frame, 72, 92)}/>
-						
-						
-						
+						{/* <Component name = {'Grid'} {...grid} bump = {bump(frame, 50, 70)}/> */}
+						{/* <Component name = {'Score'} {...score} bump = {bump(frame, 72, 92)}/> */}
 						
 						{/* <UseEffectHook {...useEffectHook}/> */}
 
-						<ObjectComponent x={app.slots.score.position.x}  y={app.slots.score.position.y} item = {{x: 7, o: 3}}/>
-						<ArrayComponent  x={app.slots.cells.position.x}  y={app.slots.cells.position.y} cells={cells}/>
-						<ValueComponent  x={app.slots.turn.position.x}   y={app.slots.turn.position.y} name = 'turn' value = {'x'}/>
 					</svg>
 				</Sequence>
 		</AbsoluteFill>

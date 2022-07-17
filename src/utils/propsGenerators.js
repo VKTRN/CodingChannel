@@ -1,4 +1,4 @@
-const getComponentComputed = (component) => {
+export const getComponentComputed = (component) => {
   
   const height = component.states.length * 70 + 110
 
@@ -12,6 +12,7 @@ const getComponentComputed = (component) => {
     height: height,
     right: component.x + component.width,
     bottom: component.y + height,
+    states: component.states,
     slots: {},
     props: [],
   }
@@ -21,11 +22,19 @@ const getComponentComputed = (component) => {
     
     const x = computed.left
     const y = computed.top + index * 70 + 90
-    const position = {x, y}
+    // const position = {x, y}
     const connection = {x: computed.right, y: y+35}
-    slots[state] = {position, connection}
 
-    computed.slots = slots
+
+
+
+    computed.states[index].props.x = x
+    computed.states[index].props.y = y
+    computed.states[index].props.connection = connection
+
+    // slots[state] = {position, connection}
+    // computed.slots = slots
+
   })
 
   for (let i = 0; i < component.nProps; i++) {
@@ -38,8 +47,8 @@ const getComponentComputed = (component) => {
       break
     }
     
-    
-    const l = 60
+    const d = 10
+    const l = 2*d*(component.nProps-1)
     const c = l/(component.nProps-1)
     const x = component.x
     const y = component.y + height/2 - l/2 + i*c
@@ -51,33 +60,22 @@ const getComponentComputed = (component) => {
 
 }
 
-const appComponent = {
-  name: 'App',
-  x: 200,
-  y:200,
-  width: 260,
-  states: ['score', 'cells', 'turn'],
-  nProps: 0
+export const generatePointsY = (start, end, offset) => {
+	const midY = start.y + (end.y - start.y) * offset
+	const points = []
+	points.push(start)
+	points.push({x: start.x, y: midY})
+	points.push({x: end.x, y: midY})
+	points.push(end)
+	return points
 }
 
-const gridComponent = {
-  name: 'Grid',
-  x: 700,
-  y:600,
-  width: 260,
-  states: ['', '', ''],
-  nProps: 2
+export const generatePointsX = (start, end, offset) => {
+	const midX = start.x + (end.x - start.x) * offset
+	const points = []
+	points.push(start)
+	points.push({x: midX, y: start.y})
+	points.push({x: midX, y: end.y})
+	points.push(end)
+	return points
 }
-
-const scoreComponent = {
-  name: 'Score',
-  x: 700,
-  y: 100,
-  width: 260,
-  states: ['', '', ''],
-  nProps: 1
-}
-
-export const app   = getComponentComputed(appComponent)
-export const grid  = getComponentComputed(gridComponent)
-export const score = getComponentComputed(scoreComponent)
