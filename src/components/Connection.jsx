@@ -14,8 +14,6 @@ export const Connection = ({points, color='black', signalColor = 'yellow', veloc
   const r2              = linear(frame, t0+signalFrames, t0+totalFrames)
   const pointsReversed  = points.slice(0).reverse()
 
-  console.log(length)
-  console.log(signalLength)
 
   const interpolation1  = reverse? getInterpolation(pointsReversed, r1) : getInterpolation(points, r1)
   const interpolation2  = reverse? getInterpolation(pointsReversed, r2) : getInterpolation(points, r2)

@@ -22,19 +22,11 @@ export const getComponentComputed = (component) => {
     
     const x = computed.left
     const y = computed.top + index * 70 + 90
-    // const position = {x, y}
     const connection = {x: computed.right, y: y+35}
-
-
-
 
     computed.states[index].props.x = x
     computed.states[index].props.y = y
     computed.states[index].props.connection = connection
-
-    // slots[state] = {position, connection}
-    // computed.slots = slots
-
   })
 
   for (let i = 0; i < component.nProps; i++) {
@@ -60,6 +52,17 @@ export const getComponentComputed = (component) => {
 
 }
 
+export const getComponentsComputed = (component) => {
+  const computed = []
+  
+  for (let i = 0; i < component.n; i++) {
+    const newComponent = {...component, y: component.y + i*130}
+    computed.push(getComponentComputed(newComponent))
+  }
+
+  return computed
+}
+
 export const generatePointsY = (start, end, offset) => {
 	const midY = start.y + (end.y - start.y) * offset
 	const points = []
@@ -77,5 +80,6 @@ export const generatePointsX = (start, end, offset) => {
 	points.push({x: midX, y: start.y})
 	points.push({x: midX, y: end.y})
 	points.push(end)
+  
 	return points
 }
