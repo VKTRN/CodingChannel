@@ -30,13 +30,14 @@ const scoreComponent = {
 }
 
 const cellComponents = {
-  name: 'cell',
+  name: 'Cell',
   x:1300,
-  y:50,
+  y:65,
   width: 150,
+  height: 80,
   states: [],
   nProps: 1,
-  n: 8
+  n: 9
 }
 
 export const Cells = getComponentsComputed(cellComponents)

@@ -1,6 +1,6 @@
 export const getComponentComputed = (component) => {
   
-  const height = component.states.length * 70 + 110
+  const height = component.height? component.height : component.states.length * 70 + 110
 
   const computed = {
     name: component.name,
@@ -18,7 +18,7 @@ export const getComponentComputed = (component) => {
   }
 
   component.states.forEach((state, index) => {
-    const slots = JSON.parse(JSON.stringify(computed.slots))
+    // const slots = JSON.parse(JSON.stringify(computed.slots))
     
     const x = computed.left
     const y = computed.top + index * 70 + 90
@@ -28,6 +28,10 @@ export const getComponentComputed = (component) => {
     computed.states[index].props.y = y
     computed.states[index].props.connection = connection
   })
+
+  if(component.states.length === 0) {
+    computed.output = {x: computed.right, y: computed.top + computed.height/2}
+  }
 
   for (let i = 0; i < component.nProps; i++) {
     
@@ -56,7 +60,7 @@ export const getComponentsComputed = (component) => {
   const computed = []
   
   for (let i = 0; i < component.n; i++) {
-    const newComponent = {...component, y: component.y + i*130}
+    const newComponent = {...component, y: component.y + i*110}
     computed.push(getComponentComputed(newComponent))
   }
 
@@ -74,6 +78,7 @@ export const generatePointsY = (start, end, offset) => {
 }
 
 export const generatePointsX = (start, end, offset) => {
+  console.log('generatePointsX', start, end, offset)
 	const midX = start.x + (end.x - start.x) * offset
 	const points = []
 	points.push(start)
@@ -82,4 +87,13 @@ export const generatePointsX = (start, end, offset) => {
 	points.push(end)
   
 	return points
+}
+
+export const generateConnections = (emitter, receivers, offset) => {
+  const connections = receivers.map((receiver) => {
+    const points = generatePointsX(emitter, receiver.props[0], offset)
+    console.log('hi')
+    return points
+  })
+  return connections
 }
