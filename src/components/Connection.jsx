@@ -10,19 +10,28 @@ export const Connection = ({points, color='black', signalColor = 'yellow', veloc
   const length          = lengths.reduce((acc, curr) => acc + curr)
   const signalFrames    = signalLength / velocity
   const totalFrames     = length / velocity + signalFrames
+  const t1 = 6
   const r1              = linear(frame, t0, t0+totalFrames - signalFrames)
   const r2              = linear(frame, t0+signalFrames, t0+totalFrames)
+  const r3              = linear(frame, t1, t1+totalFrames - signalFrames)
+  const r4              = linear(frame, t1+signalFrames, t1+totalFrames)
   const pointsReversed  = points.slice(0).reverse()
 
 
   const interpolation1  = reverse? getInterpolation(pointsReversed, r1) : getInterpolation(points, r1)
   const interpolation2  = reverse? getInterpolation(pointsReversed, r2) : getInterpolation(points, r2)
+
+  const interpolation3  = reverse? getInterpolation(pointsReversed, r3) : getInterpolation(points, r3)
+  const interpolation4  = reverse? getInterpolation(pointsReversed, r4) : getInterpolation(points, r4)
   
   return(
     <>
      <polyline id="eins" points={getPolyline(points)} fill = 'none' stroke = {color} strokeWidth = {5}/>
      {signal && <polyline id="eins" points={getPolyline(interpolation1)} fill = 'none' stroke = {signalColor} strokeWidth = {5}/>}
      {signal && <polyline id="eins" points={getPolyline(interpolation2)} fill = 'none' stroke = {color} strokeWidth = {5}/>}
+
+     {signal && <polyline id="eins" points={getPolyline(interpolation3)} fill = 'none' stroke = {"red"} strokeWidth = {5}/>}
+     {signal && <polyline id="eins" points={getPolyline(interpolation4)} fill = 'none' stroke = {color} strokeWidth = {5}/>}
     </> 
   )
 }

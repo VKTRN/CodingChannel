@@ -5,7 +5,23 @@ import {grid}            from '../props/components'
 import {score}           from '../props/components'
 import {Cells}           from '../props/components'
 
-export const cellsAppToGrid   = generatePointsX(app.states[1].props.connection, grid.props[0],  .50)
-export const turnAppToGrid    = generatePointsX(app.states[2].props.connection, grid.props[1],  .44)
-export const scoreAppToScore  = generatePointsX(app.states[0].props.connection, score.props[0], .45)
-export const cellsGridToCells = generateConnections(grid.output, Cells, .50) 
+const cellsAppToGrid   = {}
+const turnAppToGrid    = {}
+const scoreAppToScore  = {}
+const cellsGridToCells = {}
+
+cellsAppToGrid.points   = generatePointsX(app.states[1].props.connection, grid.props[0],  .50)
+turnAppToGrid.points    = generatePointsX(app.states[2].props.connection, grid.props[1],  .44)
+scoreAppToScore.points  = generatePointsX(app.states[0].props.connection, score.props[0], .45)
+cellsGridToCells.points = generateConnections(grid.output, Cells, .50) 
+
+cellsAppToGrid.signals = [
+    {t0:0, color: "red"}, 
+    {t0:30, color: "green"}, 
+    {t0:60, color: "yellow"}
+]
+
+export {cellsAppToGrid}
+export {turnAppToGrid}
+export {scoreAppToScore}
+export {cellsGridToCells}

@@ -22,8 +22,8 @@ const gridComponent = {
 
 const scoreComponent = {
   name: 'Score',
-  x: 700,
-  y: 200,
+  x: 800,
+  y: 100,
   width: 260,
   states: [],
   nProps: 1
