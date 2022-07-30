@@ -7,3 +7,5 @@ export const getTotalLength = (points) => {
   }
   return length
 }
+
+export const clone = (x) => JSON.parse(JSON.stringify(x))
