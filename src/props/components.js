@@ -4,7 +4,7 @@ import {states}                from './states'
 
 const appComponent = {
   name: 'App',
-  x: 200,
+  x: 100,
   y:200,
   width: 260,
   states: [states.score, states.cells, states.turn],
@@ -22,7 +22,7 @@ const gridComponent = {
 
 const scoreComponent = {
   name: 'Score',
-  x: 1200,
+  x: 360+1000,
   y: 100,
   width: 260,
   states: [],

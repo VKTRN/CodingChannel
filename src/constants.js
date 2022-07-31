@@ -1,2 +1,2 @@
-export const signalLength   = 50
+export const signalLength   = 100
 export const signalVelocity = 10

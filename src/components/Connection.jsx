@@ -2,7 +2,7 @@ import {useCurrentFrame} from 'remotion';
 import {interpolate} from 'remotion';
 import {Easing} from 'remotion';
 import {signalLength} from '../constants';
-import {clone} from '../utils/util';
+import {clone, getTotalLength} from '../utils/util';
 
 export const Connection = ({points, color='black', signalColor = 'yellow', velocity = 5, reverse = false, signal = true, t0 =0, signalLength = 100}) => {
 
@@ -74,47 +74,67 @@ const getIndex = (lengths, length) => {
 	// const length = lengths.reduce((acc, curr) => acc + curr)
   let remainingLength = length * 1
   for (let i = 0; i < lengths.length; i++) {
-    remainingLength -= lengths[i]
-    if (remainingLength < 0) {
+    console.log(i)
+    if (remainingLength < lengths[i]) {
       index = i
       break
     }
+    remainingLength -= lengths[i]
   }
 
-  return {index: index, remainingLength: -remainingLength}
+  return {index: index, remainingLength: remainingLength}
 }
 
+
 const getInterpolation = (points, fraction) => {
-  if(fraction === 1) return points
-  const lengths 								 = getLengths(points)
-  const length = lengths.reduce((acc, curr) => acc + curr)
-  const lEnd = Math.min(length*fraction, length)
-  const lStart = Math.max(lEnd - signalLength, 0)
-  const {index:indexEnd,remainingLength: remainingLengthEnd} = getIndex(lengths, lEnd)
-  const {index:indexStart,remainingLength: remainingLengthStart} = getIndex(clone(lengths).reverse(), lStart)
-	const interpolation = points.slice(indexStart+1, indexEnd+1)
   
-  
-	const x2 = points[indexEnd].x + (points[indexEnd + 1].x - points[indexEnd].x) *(lengths[indexEnd] - remainingLengthEnd)/ lengths[indexEnd]
-  const y2 = points[indexEnd].y + (points[indexEnd + 1].y - points[indexEnd].y) *(lengths[indexEnd] - remainingLengthEnd)/ lengths[indexEnd]
-  
-  let x1 = 0
-  let y1 = 0
-  
-  if(true){
-    x1 = points[indexStart+1].x + (-points[indexStart + 1].x + points[indexStart].x) *(remainingLengthStart)/ clone(lengths)[indexStart]
-    y1 = points[indexStart+1].y + (-points[indexStart + 1].y + points[indexStart].y) *(remainingLengthStart)/ clone(lengths)[indexStart]
-    const firstPoint = {x: x1, y: y1}
-    interpolation.unshift(firstPoint)
+  const lengths     = getLengths(points)
+  const totalLength = getTotalLength(points)
+
+  const pathToEnd   = fraction * totalLength
+  const {index, remainingLength} = getIndex(lengths, pathToEnd)
+  const signal = points.slice(0, index+1)
+
+  console.log(remainingLength, index)
+
+  if(index<signal.length){
+    const p0   = signal[index]
+    const dx   = lengths[index]
+    const dp_  = subtract(points[index+1],points[index])
+    const dp   = multiply(dp_, remainingLength/dx)
+    const pEnd = add(p0, dp)
+    signal.push(pEnd)
+  }
+  else{signal.push(points[index])}
+
+
+  const newSignal = []
+  let remaining = signalLength
+
+  const lengths2 = getLengths(signal)
+  let i2 = signal.length
+
+  while(remaining > 0){
+    i2--
+    if(i2 === 0) {break};
+    newSignal.unshift(signal[i2])
+    if(remaining <= lengths2[i2-1]) {break}
+    remaining = remaining - lengths2[i2-1];
   }
   
-  
-  const lastPoint = {x: x2, y: y2}
-	interpolation.push(lastPoint)
-  console.log(indexStart, indexEnd, remainingLengthStart, remainingLengthEnd, interpolation)
+  if(i2 > 0){
+    const p1  = signal[i2]
+    const dx2 = lengths2[i2-1]
+    const dp2_  = subtract(signal[i2-1],signal[i2])
+    const dp2   = multiply(dp2_, remaining/dx2)
+    const pStart = add(p1, dp2)
+    newSignal.unshift(pStart)
+  }
+  else{
+    newSignal.unshift(signal[0])
+  }
 
-	return interpolation
-
+	return newSignal
 }
 
 const getPolyline = (points) => {
@@ -125,6 +145,15 @@ const getPolyline = (points) => {
 	return polyline.join(' ')
 }
 
+const add = (p1, p2) => {
+  return {x: p1.x+p2.x, y: p1.y+p2.y}
+}
 
+const subtract = (p1, p2) => {
+  return {x: p1.x-p2.x, y: p1.y-p2.y}
+}
 
+const multiply = (p,c) => {
+  return {x: p.x*c, y: p.y*c}
+}
 

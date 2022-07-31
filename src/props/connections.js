@@ -10,7 +10,7 @@ const turnAppToGrid    = {}
 const scoreAppToScore  = {}
 const cellsGridToCells = {}
 
-scoreAppToScore.points  = generatePointsX(app.states[0].props.connection, score.props[0], .45)
+scoreAppToScore.points  = generatePointsX(app.states[0].props.connection, score.props[0], .5)
 cellsAppToGrid.points   = generatePointsX(app.states[1].props.connection, grid.props[0],  .50)
 turnAppToGrid.points    = generatePointsX(app.states[2].props.connection, grid.props[1],  .44)
 cellsGridToCells.points = generateConnections(grid.output, Cells, .50) 
