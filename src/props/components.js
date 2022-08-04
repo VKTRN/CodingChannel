@@ -22,7 +22,7 @@ const gridComponent = {
 
 const scoreComponent = {
   name: 'Score',
-  x: 360+1000,
+  x: 700,
   y: 100,
   width: 260,
   states: [],

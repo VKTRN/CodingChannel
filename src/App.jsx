@@ -32,15 +32,15 @@ export const App = () => {
 		<AbsoluteFill style={{backgroundColor: '#5a9de0'}}>
 			<Sequence from={0}>
 				<svg width="1920" height="1080">
-					{/* <DoubleConnection	points = {cellsAppToGrid.points} forward = {true} t0={0} velocity = {signalVelocity} signalLength = {signalLength} direction = 'x'/> */}
-					{/* <Connection				points = {turnAppToGrid.points}   color='darkred' t0={0} velocity = {signalVelocity} signalLength = {signalLength}/> */}
+					<DoubleConnection	points = {cellsAppToGrid.points} forward = {true} t0={0} velocity = {signalVelocity} signalLength = {signalLength} direction = 'x'/>
+					<Connection				points = {turnAppToGrid.points}   color='darkred' t0={0} velocity = {signalVelocity} signalLength = {signalLength}/>
 					<Connection				points = {scoreAppToScore.points} color='purple'  t0={0} velocity = {signalVelocity} signalLength = {signalLength}/>
-					{/* <ConnectionArray	pointsArray = {cellsGridToCells.points}/> */}
+					<ConnectionArray	pointsArray = {cellsGridToCells.points}/>
 					
 					<Component  {...app}/>	
 					<Component  {...grid}  bump = {bump(frame, getTotalLength(cellsAppToGrid.points)/signalVelocity)}/>
 					<Component  {...score} bump = {bump(frame, getTotalLength(scoreAppToScore.points)/signalVelocity)}/>
-					{/* <ComponentArray components = {Cells}/> */}
+					<ComponentArray components = {Cells}/>
 				</svg>
 			</Sequence>
 		</AbsoluteFill>

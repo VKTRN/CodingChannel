@@ -1,37 +1,25 @@
 import {useCurrentFrame} from 'remotion';
-import {interpolate} from 'remotion';
-import {Easing} from 'remotion';
-import {signalLength} from '../constants';
-import {clone, getTotalLength} from '../utils/util';
+import {interpolate}     from 'remotion';
+import {Easing}          from 'remotion';
+import {signalLength}    from '../constants';
+import {clone}           from '../utils/util';
+import {getTotalLength}  from '../utils/util';
 
 export const Connection = ({points, color='black', signalColor = 'yellow', velocity = 5, reverse = false, signal = true, t0 =0, signalLength = 100}) => {
 
-  const frame           = useCurrentFrame()
-
-  const lengths          = getLengths(points)
-  const length          = lengths.reduce((acc, curr) => acc + curr)
-  const signalFrames    = signalLength / velocity
-  const totalFrames     = length / velocity + signalFrames
-  const t1 = 6
-  const r1              = linear(frame, t0, t0+totalFrames - signalFrames)
-  const r2              = linear(frame, t0+signalFrames, t0+totalFrames)
-  const r3              = linear(frame, t1, t1+totalFrames - signalFrames)
-  const r4              = linear(frame, t1+signalFrames, t1+totalFrames)
-  const pointsReversed  = points.slice(0).reverse()
-
-
-  const interpolation1  = reverse? getInterpolation(pointsReversed, r1) : getInterpolation(points, r1)
-  // const interpolation2  = reverse? getInterpolation(pointsReversed, r2) : getInterpolation(points, r2)
-
-  // const interpolation3  = reverse? getInterpolation(pointsReversed, r3) : getInterpolation(points, r3)
-  // const interpolation4  = reverse? getInterpolation(pointsReversed, r4) : getInterpolation(points, r4)
+  const frame          = useCurrentFrame()
+  const lengths        = getLengths(points)
+  const length         = lengths.reduce((acc, curr) => acc + curr)
+  const signalFrames   = signalLength / velocity
+  const totalFrames    = length / velocity + signalFrames
+  const r              = linear(frame, t0, t0+totalFrames)
+  const pointsReversed = points.slice(0).reverse()
+  const interpolation  = reverse? getInterpolation(pointsReversed, r) : getInterpolation(points, r)
   
   return(
     <>
      <polyline id="eins" points={getPolyline(points)} fill = 'none' stroke = {color} strokeWidth = {5}/>
-     {signal && <polyline id="eins" points={getPolyline(interpolation1)} fill = 'none' stroke = {signalColor} strokeWidth = {5}/>}
-     {/* {signal && <polyline id="eins" points={getPolyline(interpolation2)} fill = 'none' stroke = {color} strokeWidth = {5}/>} */}
-
+     {signal && <polyline id="eins" points={getPolyline(interpolation)} fill = 'none' stroke = {signalColor} strokeWidth = {5}/>}
     </> 
   )
 }
@@ -74,9 +62,8 @@ const getIndex = (lengths, length) => {
 	// const length = lengths.reduce((acc, curr) => acc + curr)
   let remainingLength = length * 1
   for (let i = 0; i < lengths.length; i++) {
-    console.log(i)
+    index = i
     if (remainingLength < lengths[i]) {
-      index = i
       break
     }
     remainingLength -= lengths[i]
@@ -85,27 +72,39 @@ const getIndex = (lengths, length) => {
   return {index: index, remainingLength: remainingLength}
 }
 
-
 const getInterpolation = (points, fraction) => {
-  
-  const lengths     = getLengths(points)
-  const totalLength = getTotalLength(points)
 
-  const pathToEnd   = fraction * totalLength
-  const {index, remainingLength} = getIndex(lengths, pathToEnd)
-  const signal = points.slice(0, index+1)
 
-  console.log(remainingLength, index)
-
-  if(index<signal.length){
-    const p0   = signal[index]
-    const dx   = lengths[index]
-    const dp_  = subtract(points[index+1],points[index])
-    const dp   = multiply(dp_, remainingLength/dx)
-    const pEnd = add(p0, dp)
-    signal.push(pEnd)
+  if (fraction === 1) {
+    return []
   }
-  else{signal.push(points[index])}
+
+  const points2 = clone(points)
+  const p = clone(points2[points2.length - 1])
+  p.x = p.x + signalLength
+  points2.push(p)
+  const lengths     = getLengths(points2)
+  const totalLength = getTotalLength(points2)
+
+  const pathToEnd   = fraction * totalLength // length form start of connection to end of signal
+  const {index, remainingLength} = getIndex(lengths, pathToEnd) // index of the last vertex that the signal crossed
+  const signal = points2.slice(0, index+1)
+
+  // console.log(index, remainingLength)
+  // if (remainingLength === 0 && index === lengths.length - 1) {
+  //   signal.push(points2[index+1])
+  //   console.log('a')
+  // }
+  // else{
+  // }
+  const p0   = signal[index]
+  const dx   = lengths[index]
+  const dp_  = subtract(points2[index+1],points2[index])
+  const dp   = multiply(dp_, remainingLength/dx)
+  const pEnd = add(p0, dp)
+  signal.push(pEnd)
+  console.log('b')
+
 
 
   const newSignal = []
@@ -133,6 +132,7 @@ const getInterpolation = (points, fraction) => {
   else{
     newSignal.unshift(signal[0])
   }
+
 
 	return newSignal
 }
