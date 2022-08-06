@@ -6,7 +6,7 @@ import {signalVelocity}  from '../constants';
 import {clone}           from '../utils/util';
 import {getTotalLength}  from '../utils/util';
 
-export const Connection = ({points, color='black', signals}) => {
+export const Connection = ({points, color='black', signals=[]}) => {
 
 	const frame          = useCurrentFrame()
 	const lengths        = getLengths(points)
@@ -22,13 +22,13 @@ export const Connection = ({points, color='black', signals}) => {
 	
 	return(
 		<>
-		 <polyline id="eins" points={getPolyline(points)} 			 fill = 'none' stroke = {color} 			strokeWidth = {5}/>
+		 <polyline id="eins" points={getPolyline(points)} fill='none' stroke={color} strokeWidth={5}/>
 
 			{
 			interpolations.map((interpolation, i) => 
-					<polyline id={`${i}`} points={getPolyline(interpolation)} fill = 'none' stroke = {signals[i].color} strokeWidth = {5}/>
+					<polyline id={`${i}`} points={getPolyline(interpolation)} fill='none' stroke={signals[i].color} strokeWidth={5}/>
 				)
-				}
+			}
 
 		</> 
 	)

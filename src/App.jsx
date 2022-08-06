@@ -9,8 +9,8 @@ import {Connection}				from './components/Connection'
 import {DoubleConnection}	from './components/DoubleConnection'
 
 import {app}							from './props/components.js'
-import {grid}							from './props/components.js'
-import {score}						from './props/components.js'
+import {grid}							from './props/bumps.js'
+import {score}						from './props/bumps.js'
 import {Cells}						from './props/components.js'
 
 import {cellsAppToGrid}		from './props/connections.js'
@@ -26,21 +26,23 @@ import {bump}							from './utils/interpolation.js'
 
 export const App = () => {
 
+	console.log(score)
+
 	const frame = useCurrentFrame()
 	
 	return (
 		<AbsoluteFill style={{backgroundColor: '#5a9de0'}}>
 			<Sequence from={0}>
 				<svg width="1920" height="1080">
-					{/* <DoubleConnection	points = {cellsAppToGrid.points} forward = {true} t0={0} velocity = {signalVelocity} signalLength = {signalLength} direction = 'x'/> */}
-					{/* <Connection				points = {turnAppToGrid.points}   color='darkred' t0={0} velocity = {signalVelocity} signalLength = {signalLength}/> */}
-					<Connection				{...scoreAppToScore}/>
+					<DoubleConnection	connection = {cellsAppToGrid}/>
+					<Connection {...turnAppToGrid}/>
+					<Connection	{...scoreAppToScore}/>
 					{/* <ConnectionArray	pointsArray = {cellsGridToCells.points}/> */}
 					
 					<Component  {...app}/>	
 					<Component  {...grid}  bump = {bump(frame, getTotalLength(cellsAppToGrid.points)/signalVelocity)}/>
-					<Component  {...score} bump = {bump(frame, getTotalLength(scoreAppToScore.points)/signalVelocity)}/>
-					<ComponentArray components = {Cells}/>
+					<Component  {...score}/>
+					{/* <ComponentArray components = {Cells}/> */}
 				</svg>
 			</Sequence>
 		</AbsoluteFill>

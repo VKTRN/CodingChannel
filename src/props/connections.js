@@ -1,9 +1,9 @@
-import {generatePointsX} from '../utils/propsGenerators'
-import {generateConnections} from '../utils/propsGenerators'
-import {app}             from '../props/components'
-import {grid}            from '../props/components'
-import {score}           from '../props/components'
-import {Cells}           from '../props/components'
+import {generatePointsX}			from '../utils/propsGenerators'
+import {generateConnections}	from '../utils/propsGenerators'
+import {app}									from '../props/components'
+import {grid}									from '../props/components'
+import {score}								from '../props/components'
+import {Cells}								from '../props/components'
 
 const cellsAppToGrid		= {}
 const turnAppToGrid			= {}
@@ -24,6 +24,12 @@ scoreAppToScore.signals = [
 	{t0:0,  color: "red"},
 	{t0:11, color: "lime"},
 	{t0:22, color: "yellow"}
+]
+
+cellsAppToGrid.signals = [
+	{t0:0,  color: "red"},
+	{t0:30, color: "lime"},
+	{t0:60, color: "yellow"}
 ]
 
 export {cellsAppToGrid}
