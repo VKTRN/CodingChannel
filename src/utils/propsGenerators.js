@@ -89,10 +89,10 @@ export const generatePointsX = (start, end, offset) => {
 	return points
 }
 
-export const generateConnections = (emitter, receivers, offset) => {
+export const generateConnections = (emitter, receivers, offset, signals, color) => {
   const connections = receivers.map((receiver) => {
     const points = generatePointsX(emitter, receiver.props[0], offset)
-    return points
+    return {points, color, signals}
   })
   return connections
 }

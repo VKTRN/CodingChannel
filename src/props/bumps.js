@@ -1,11 +1,17 @@
 import {grid}             from '../props/components'
 import {score}            from '../props/components'
+import {Cells}            from '../props/components'
+
 import {scoreAppToScore}  from '../props/connections'
+import {cellsGridToCells} from '../props/connections'
 import {cellsAppToGrid}   from '../props/connections'
+
 import {getTotalLength}   from '../utils/util'
 import {range}            from '../utils/util'
+
 import {signalVelocity}   from '../constants'
 import {durationInFrames} from '../constants'
+
 import {bump}             from '../utils/interpolation'
 
 const getBumps = (connection) => {
@@ -26,9 +32,11 @@ const getBumps = (connection) => {
 
 score.bumps = getBumps(scoreAppToScore)
 grid.bumps  = getBumps(cellsAppToGrid)
+Cells.forEach((cell, i) => {cell.bumps = getBumps(cellsGridToCells[i])})
 
 export {score}
 export {grid}
+export {Cells}
 
 
 

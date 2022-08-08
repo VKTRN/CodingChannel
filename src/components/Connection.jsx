@@ -100,22 +100,12 @@ const getInterpolation = (points, fraction) => {
 	const {index, remainingLength} = getIndex(lengths, pathToEnd) // index of the last vertex that the signal crossed
 	const signal = points2.slice(0, index+1)
 
-	// console.log(index, remainingLength)
-	// if (remainingLength === 0 && index === lengths.length - 1) {
-	//   signal.push(points2[index+1])
-	//   console.log('a')
-	// }
-	// else{
-	// }
 	const p0   = signal[index]
 	const dx   = lengths[index]
 	const dp_  = subtract(points2[index+1],points2[index])
 	const dp   = multiply(dp_, remainingLength/dx)
 	const pEnd = add(p0, dp)
 	signal.push(pEnd)
-	console.log('b')
-
-
 
 	const newSignal = []
 	let remaining = signalLength
